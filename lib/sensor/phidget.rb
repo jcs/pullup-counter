@@ -8,7 +8,7 @@ class Phidget
   STATE_IDLE_TO_PULLING_UP = 150
   STATE_PULLING_UP_TO_PULLED_UP = 325
   STATE_PULLING_UP_TO_IDLE = 200
-  STATE_PULLING_UP_TO_FINISHED = 150
+  STATE_PULLED_UP_TO_IDLE = 150
 
   def initialize(parent)
     @parent = parent
@@ -67,8 +67,8 @@ class Phidget
       end
 
     when :pulled_up
-      if value <= STATE_PULLING_UP_TO_FINISHED 
-        self.state = :finished
+      if value <= STATE_PULLED_UP_TO_IDLE
+        self.state = :idle
       end
     end
   end
@@ -85,9 +85,8 @@ class Phidget
       puts "#{@cur_time.to_f} - state is now #{state} (#{self.cur_value})"
     end
 
-    if state == :finished
+    if state == :pulled_up
       @parent.log_pullup!(@cur_time)
-      @state = :idle
     end
   end
 end
