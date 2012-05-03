@@ -27,7 +27,6 @@ class Fitbit < Loggerish
       "startTime" => time.strftime("%H:%M"),
       "durationMillis" => 1000,
       "date" => time.strftime("%Y-%m-%d"),
-      "distance" => "1.0",
     })
 
     begin
