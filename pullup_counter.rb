@@ -26,6 +26,7 @@ class PullupCounter
 
   def initialize
     @config = ConfigHash.new
+    @semaphore = Mutex.new
 
     # add in options from each logger
     @loggers = []
@@ -83,23 +84,31 @@ class PullupCounter
   end
 
   def aputs(str)
-    STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+    @semaphore.synchronize do
+      STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+    end
   end
 
   def dputs(str)
     if @config["debug"]
-      STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+      @semaphore.synchronize do
+        STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+      end
     end
   end
 
   def vputs(str)
     if @config["verbose"] || @config["debug"]
-      STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+      @semaphore.synchronize do
+        STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+      end
     end
   end
 
   def eputs(str)
-    STDERR.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+    @semaphore.synchronize do
+      STDERR.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+    end
   end
 end
 
