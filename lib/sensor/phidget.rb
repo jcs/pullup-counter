@@ -14,6 +14,7 @@ class Phidget
     @parent = parent
     @state = :idle
     @last_state_change = Time.now
+    @last_pullup = nil
     @cur_time = nil
   end
 
@@ -83,7 +84,12 @@ class Phidget
     @parent.vputs "state is now #{state} (#{self.cur_value})"
 
     if state == :pulled_up
-      @parent.log_pullup!(@cur_time)
+      if @last_pullup && (@cur_time.to_f - @last_pullup.to_f < 1.0)
+        @parent.vputs "ignoring bad sensor data (duplicate pull-up)"
+      else
+        @parent.log_pullup!(@cur_time)
+        @last_pullup = @cur_time
+      end
     end
   end
 end
