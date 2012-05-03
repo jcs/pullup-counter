@@ -10,10 +10,7 @@ class Beeper < Loggerish
 
   def after_initialize
     if @enabled = !!@parent.config["sound"]
-      if @parent.config["verbose"]
-        puts "#{Time.now.to_f} - playing sound file " <<
-          @parent.config["sound"]
-      end
+      @parent.vputs "playing sound file " << @parent.config["sound"]
 
       if `uname -s`.strip == "OpenBSD"
         @player = [ "aucat", "-i" ]
@@ -27,9 +24,7 @@ class Beeper < Loggerish
   def log_pullup!(time)
     cmd = @player + [ @parent.config["sound"] ]
 
-    if @parent.config["debug"]
-      puts "#{Time.now.to_f} - running " << cmd.inspect
-    end
+    @parent.dputs "running " << cmd.inspect
 
     system(*cmd)
   end

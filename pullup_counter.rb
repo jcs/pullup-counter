@@ -76,11 +76,30 @@ class PullupCounter
         begin
           logger.log_pullup!(time)
         rescue => e
-          puts "#{Time.now.to_f} - error from #{logger.class} logger: " <<
-            e.message
+          eputs "error from #{logger.class} logger: " << e.message
         end
       end
     end
+  end
+
+  def aputs(str)
+    STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+  end
+
+  def dputs(str)
+    if @config["debug"]
+      STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+    end
+  end
+
+  def vputs(str)
+    if @config["verbose"] || @config["debug"]
+      STDOUT.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
+    end
+  end
+
+  def eputs(str)
+    STDERR.puts Time.now.strftime("%Y-%m-%d %H:%M:%S.%L") << " - #{str}"
   end
 end
 

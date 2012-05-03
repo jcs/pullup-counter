@@ -8,10 +8,8 @@ class Textfile < Loggerish
 
   def after_initialize
     if @enabled = !!@parent.config["file"]
-      if @parent.config["verbose"]
-        puts "#{Time.now.to_f} - enabling plaintext logging module to " <<
+      @parent.vputs "enabling plaintext logging module to " <<
           @parent.config["file"]
-      end
     end
   end
 
@@ -20,8 +18,6 @@ class Textfile < Loggerish
       f.puts time.strftime("%Y-%m-%d %H:%M:%S")
     end
     
-    if @parent.config["verbose"]
-      puts "#{Time.now.to_f} - logged to file #{@parent.config["file"]}"
-    end
+    @parent.vputs "logged to file " << @parent.config["file"]
   end
 end

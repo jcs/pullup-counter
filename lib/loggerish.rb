@@ -14,6 +14,6 @@ class Loggerish
   end
 
   def log_pullup!(time)
-    puts "#{Time.now.to_f} - logged pullup"
+    @parent.aputs "logged pullup"
   end
 end

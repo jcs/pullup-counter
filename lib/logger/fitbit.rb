@@ -11,9 +11,7 @@ class Fitbit < Loggerish
 
   def after_initialize
     if @enabled = !!@parent.config["fitbit"]
-      if @parent.config["verbose"]
-        puts "#{Time.now.to_f} - enabling Fitbit logging module"
-      end
+      @parent.vputs "enabling Fitbit logging module"
 
       verify_keys
     end
@@ -35,16 +33,13 @@ class Fitbit < Loggerish
     begin
       h = JSON.parse(json)
       if (id = h["activityLog"]["activityId"].to_i) != 0
-        if @parent.config["verbose"]
-          puts "#{Time.now.to_f} - logged pullup on fitbit (id #{id})"
-        end
+        @parent.vputs "logged pullup on fitbit (id #{id})"
       else
         raise "no activity id"
       end
 
     rescue => e
-      puts "#{Time.now.to_f} - error from fitbit (#{e.message}): " <<
-        json.inspect
+      @parent.eputs "error from fitbit (#{e.message}): " << json.inspect
     end
   end
 
@@ -75,9 +70,9 @@ class Fitbit < Loggerish
         return res.body
       end
     rescue Timeout::Error => e
-      puts "#{Time.now.to_f} - timed out talking to Fitbit: #{e.message}"
+      @parent.eputs "timed out talking to Fitbit: #{e.message}"
     rescue StandardError => e
-      puts "#{Time.now.to_f} - error talking to Fitbit: #{e.message}"
+      @parent.eputs "error talking to Fitbit: #{e.message}"
     end
   end
 

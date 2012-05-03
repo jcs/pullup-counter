@@ -20,9 +20,7 @@ class Phidget
   def main_loop
     begin
       Phidgets::InterfaceKit.new do |ifkit|
-        if @parent.config["verbose"]
-          puts "#{Time.now.to_f} - reading from Phidget #{ifkit.serial_number}"
-        end
+        @parent.vputs "reading from Phidget #{ifkit.serial_number}"
 
         ifkit.on_sensor_change do |device, input, value, obj|
           @cur_time = Time.now
@@ -35,7 +33,7 @@ class Phidget
       end
 
     rescue => e
-      puts "#{Time.now.to_f} - exception in Phidget handler: #{e.message}"
+      @parent.eputs "exception in Phidget handler: #{e.message}"
       sleep 3
       retry
     end
@@ -43,7 +41,8 @@ class Phidget
 
   def cur_value=(value)
     if @parent.config["debug"]
-      puts "#{@cur_time.to_f},#{value}"
+      # XXX: direct this somewhere so it doesn't get muxed with chatter
+      STDOUT.puts "#{@cur_time.to_f},#{value}"
     end
 
     if @cur_time.to_i - @last_state_change.to_i > 10 && self.state != :idle
@@ -81,9 +80,7 @@ class Phidget
     end
 
     @state = state
-    if @parent.config["verbose"]
-      puts "#{@cur_time.to_f} - state is now #{state} (#{self.cur_value})"
-    end
+    @parent.vputs "state is now #{state} (#{self.cur_value})"
 
     if state == :pulled_up
       @parent.log_pullup!(@cur_time)
