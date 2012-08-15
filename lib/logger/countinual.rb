@@ -9,7 +9,7 @@ class Countinual < Loggerish
       [ "--countinual-key", "-k", GetoptLong::REQUIRED_ARGUMENT,
         "log to a Countinual account (API key)" ],
       [ "--countinual-counter", "-c", GetoptLong::REQUIRED_ARGUMENT,
-        "Countinual counter (default is \"pullups\"" ],
+        "Countinual counter (default is \"pullups\")" ],
     ]
   end
 
