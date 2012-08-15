@@ -27,8 +27,8 @@ class Countinual < Loggerish
     line = [
       @parent.config["countinual-key"],
       @parent.config["countinual-counter"],
-      time.to_i,
       "+1",
+      time.to_i,
     ].join(" ") + "\n"
 
     begin
